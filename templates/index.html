@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not current_user.is_authenticated %}
+    <h1 class="un_authenticated"> Вы не вошли в систему</h1>
+{% else %}
+    <h1 class="tasks_text">Tasks</h1>
+{% endif %}
+
+<div class="bg">
+     <h1>{{current_user.name}}</h1>
+</div>
+<div>
+    {% for item in jobs%}
+    <div class="Task" onclick="window.location.href = 'http://127.0.0.1:8000/{{item.name.lower()}}'">
+        <div class='main'>
+            <img class='taskImage' src="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="LOGO" />
+            <h2>{{item.name}}</h2>
+            <div class="taskInfo">
+                <div class="balls">{{item.balls}} очков</div>
+                <div class="is_finish">{{'Сделано' if item.id in current_user.jobs else 'Не сделано'}}</div>
+            </div>
+            <hr>
+            <div class='creator'>
+                <p><ins>Creator</ins> {{item.creator}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+</div>
+{% endblock %}

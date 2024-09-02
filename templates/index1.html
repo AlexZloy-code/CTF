@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg">
+    <h1>{{current_user.name}}</h1>
+</div>
+<div class="Task_open">
+    <div class="info">
+        <img class='taskImage' src="static/img/Stego.png" alt="LOGO" />
+        <div class="taskname">{{job.name}}: Волшебный звук</div>  <!-- {{name}} -->
+        <div class="creator">Creator {{job.creator}}</div> <!-- {{creator}} -->
+        <div class="taskInfo">
+            <div class="balls">{{job.balls}} очков</div> <!-- {{balls}} -->
+            <div class="is_finish">Status: {{'Сделано' if job.id in current_user.jobs else 'Не сделано'}}</div> <!-- {{'Сделано' if is_finished else 'Не сделано'}} -->
+        </div>
+    </div>
+    <div class="text">
+        <p>{{job.job}}</p>
+    </div>
+    <button class="button_download"><a>Скачать файл задания</a></button>
+</div>
+{% endblock %}
+https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80
