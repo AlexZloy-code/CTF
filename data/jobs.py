@@ -19,7 +19,7 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     flag = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relationship('User')
-    file = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     full_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 

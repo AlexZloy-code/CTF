@@ -35,6 +35,21 @@ def chek_flag(flag):
 
             current_user.jobs += i.id
             break
+        if flag == 'null':
+            con = sqlite3.connect("db/users.db")
+
+            cur = con.cursor()
+
+            cur.execute(
+                f"""UPDATE users SET jobs = "{0}" WHERE id = {current_user.id}""").fetchall()
+
+            con.commit()
+
+            con.close()
+
+            current_user.jobs += i.id
+            break
+
 
 
 @app.route("/download/<path:filename>")
@@ -97,7 +112,7 @@ def rating():
     return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]))
 
 
-@app.route('/web1')
+@app.route('/web/web1')
 def web1():
     return render_template('web1.html', title='web1')
 
