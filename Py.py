@@ -2,7 +2,7 @@ import datetime
 import sqlite3
 
 from flask import Flask
-from flask import render_template, redirect, request, make_response, jsonify
+from flask import render_template, redirect, request, make_response, jsonify, send_file
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from data import jobs_api
@@ -35,6 +35,14 @@ def chek_flag(flag):
 
             current_user.jobs += i.id
             break
+
+
+@app.route("/download/<path:filename>")
+def get_csv(filename):
+    try:
+        return send_file('tasks/' + filename, as_attachment=True, download_name=filename)
+    except FileNotFoundError:
+        abort(404)
 
 
 def create_route(i):
