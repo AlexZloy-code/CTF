@@ -19,6 +19,7 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     flag = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relationship('User')
+    file = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def __repr__(self):
         return self.name
