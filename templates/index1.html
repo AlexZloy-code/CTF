@@ -6,11 +6,11 @@
 </div>
 <div class="Task_open">
     <div class="info">
-        <img class='taskImage' src="static/img/Stego.png" alt="LOGO" />
-        <div class="taskname">{{job.name}}: Волшебный звук</div>  <!-- {{name}} -->
-        <div class="creator">Creator {{job.creator}}</div> <!-- {{creator}} -->
+        <img class='taskImage' src="static/img/{{job.img}}" alt="LOGO" />
+        <div class="taskname">{{job.name}}: {{job.full_name}}</div>
+        <div class="creator">Creator {{job.creator}}</div>
         <div class="taskInfo">
-            <div class="balls">{{job.balls}} очков</div> <!-- {{balls}} -->
+            <div class="balls">{{job.balls}} очков</div>
             <div class="is_finish">Status: {{'Сделано' if job.id in current_user.jobs else 'Не сделано'}}</div> <!-- {{'Сделано' if is_finished else 'Не сделано'}} -->
         </div>
     </div>
