@@ -1,13 +1,19 @@
 import datetime
 import sqlite3
 
-from flask import Flask
+from flask import Flask, Blueprint
 from flask import render_template, redirect, request, make_response, jsonify, send_file
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
-from data import jobs_api
+from data import jobs_api, db_session
 from forms.login_form import LoginForm
-from jobs_resourse import *
+
+from flask_restful import reqparse, abort, Api, Resource
+
+from data.users import User
+from data.jobs import Jobs
+from flask import jsonify, abort
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -15,6 +21,12 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/users.db")
+
+blueprint = Blueprint(
+    'jobs_api',
+    __name__,
+    template_folder='templates'
+)
 
 
 def chek_flag(flag):
@@ -35,21 +47,6 @@ def chek_flag(flag):
 
             current_user.jobs += i.id
             break
-        if flag == 'null':
-            con = sqlite3.connect("db/users.db")
-
-            cur = con.cursor()
-
-            cur.execute(
-                f"""UPDATE users SET jobs = "{0}" WHERE id = {current_user.id}""").fetchall()
-
-            con.commit()
-
-            con.close()
-
-            current_user.jobs += i.id
-            break
-
 
 
 @app.route("/download/<path:filename>")
@@ -112,7 +109,7 @@ def rating():
     return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]))
 
 
-@app.route('/web/web1')
+@app.route('/web1')
 def web1():
     return render_template('web1.html', title='web1')
 
@@ -155,7 +152,7 @@ def bad_request(_):
 
 
 def main():
-    app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(blueprint)
     app.run(port=8000, host='127.0.0.1')
 
 
