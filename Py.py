@@ -2,17 +2,16 @@ import datetime
 import sqlite3
 
 from flask import Flask, Blueprint
-from flask import render_template, redirect, request, make_response, jsonify, send_file
+from flask import render_template, redirect, request, make_response, jsonify, send_file, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
-from data import jobs_api, db_session
+from data import db_session
 from forms.login_form import LoginForm
 
 from flask_restful import reqparse, abort, Api, Resource
 
 from data.users import User
 from data.jobs import Jobs
-from flask import jsonify, abort
 
 
 app = Flask(__name__)
