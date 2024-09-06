@@ -68,7 +68,7 @@ def get_csv(filename):
 
 
 def create_route(i):
-    @app.route(f'/{i.name.lower()}', endpoint=i.name)
+    @app.route(f'/{i.type.lower()}', endpoint=i.type)
     def index():
         return render_template('index1.html', job=i, current_user=current_user)
 

@@ -9,17 +9,17 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    job = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    type = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    full_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     balls = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    name = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    job = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.String,
                                 sqlalchemy.ForeignKey("users.id"))
     flag = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relationship('User')
-    link = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    full_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def __repr__(self):
         return self.name
