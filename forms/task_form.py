@@ -4,5 +4,5 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(FlaskForm):
-    flag = Label('Название команды')
+    flag = Label(field_id='cmd_name', text='Название команды')
     try_ = SubmitField('TRY')
