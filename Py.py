@@ -21,9 +21,9 @@ login_manager.init_app(app)
 db_session.global_init("db/users.db")
 
 # отключаем логирование
-app.logger.disabled = True
+""" app.logger.disabled = True
 log = logging.getLogger('werkzeug')
-log.disabled = True
+log.disabled = True """
 
 blueprint = Blueprint(
     'jobs_api',
@@ -34,22 +34,29 @@ blueprint = Blueprint(
 
 def chek_flag(flag):
     db_sess = db_session.create_session()
+    if flag == 'null':
+        con = sqlite3.connect("db/users.db")
+        cur = con.cursor()
+        cur.execute(
+            f"""UPDATE users SET jobs = "{0}" WHERE id = {current_user.id}""").fetchall()
+        con.commit()
+        con.close()
+    else:
+        for i in db_sess.query(Jobs).all():
+            if i.id not in current_user.jobs and flag == i.flag:
+                con = sqlite3.connect("db/users.db")
 
-    for i in db_sess.query(Jobs).all():
-        if i.id not in current_user.jobs and flag == i.flag:
-            con = sqlite3.connect("db/users.db")
+                cur = con.cursor()
 
-            cur = con.cursor()
+                cur.execute(
+                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id}" WHERE id = {current_user.id}""").fetchall()
 
-            cur.execute(
-                f"""UPDATE users SET jobs = "{current_user.jobs + i.id}" WHERE id = {current_user.id}""").fetchall()
+                con.commit()
 
-            con.commit()
+                con.close()
 
-            con.close()
-
-            current_user.jobs += i.id
-            break
+                current_user.jobs += i.id
+                break
 
 
 @app.route("/download/<path:filename>")
@@ -112,7 +119,7 @@ def rating():
     return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]))
 
 
-@app.route('/web1')
+@app.route('/web/web1')
 def web1():
     return render_template('web1.html', title='web1')
 
