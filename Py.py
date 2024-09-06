@@ -1,18 +1,17 @@
 import datetime
 import sqlite3
+import logging
 
 from flask import Flask, Blueprint
 from flask import render_template, redirect, request, make_response, jsonify, send_file, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from data import db_session
-from forms.login_form import LoginForm
-
-from flask_restful import reqparse, abort, Api, Resource
-
 from data.users import User
 from data.jobs import Jobs
 
+from forms.login_form import LoginForm
+from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -20,6 +19,11 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/users.db")
+
+# отключаем логирование
+app.logger.disabled = True
+log = logging.getLogger('werkzeug')
+log.disabled = True
 
 blueprint = Blueprint(
     'jobs_api',
