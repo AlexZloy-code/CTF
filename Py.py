@@ -67,6 +67,46 @@ def get_csv(filename):
         abort(404)
 
 
+@app.route("/ball_changer/<path:command>/<path:balls>")
+def ball_changer(command, balls):
+    try:
+        db_sess = db_session.create_session()
+        con = sqlite3.connect("db/users.db")
+        cur = con.cursor()
+        cur.execute(
+                f"""UPDATE users SET fine = {db_sess.query(User).filter(User.name == command)[0].fine - int(balls)} WHERE name = '{command}'""").fetchall()
+        con.commit()
+        con.close()
+    except FileNotFoundError:
+        abort(404)
+
+    return render_template('CTF.html', title='CTF')
+
+
+@app.route("/add/<path:command>")
+def add(command):
+    try:
+        db_sess = db_session.create_session()
+        con = sqlite3.connect("db/users.db")
+        cur = con.cursor()
+        try:
+            if not db_sess.query(User).filter(User.name == command)[0]:
+                cur.execute(
+                    f"""INSERT INTO users (
+                          id,
+                          name,
+                          jobs,
+                          fine
+                      ) VALUES ({len(list(db_sess.query(User).all())) + 1}, "{command}", 0, 0)""").fetchall()
+        except Exception:
+            print(ex)
+        con.commit()
+        con.close()
+        return render_template('CTF.html', title='CTF')
+    except FileNotFoundError:
+        abort(404)
+
+
 def create_route(i):
     @app.route(f'/{i.type.lower()}', endpoint=i.type)
     def index():
@@ -109,7 +149,7 @@ def rating():
     table = []
 
     for i in db_sess.query(User).all():
-        balls = 0
+        balls = db_sess.query(User).filter(User.id == i.id)[0].fine
         if int(i.jobs):
             for a in i.jobs[1:]:
                 job = db_sess.query(Jobs).filter(Jobs.id == a)[0]
