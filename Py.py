@@ -90,7 +90,7 @@ def add(command):
         con = sqlite3.connect("db/users.db")
         cur = con.cursor()
         try:
-            if not db_sess.query(User).filter(User.name == command):
+            if not list(db_sess.query(User).filter(User.name == command)):
                 cur.execute(
                     f"""INSERT INTO users (
                           id,
