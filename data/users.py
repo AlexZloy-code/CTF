@@ -11,6 +11,7 @@ class User(SqlAlchemyBase, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     jobs = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    fine = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     job = orm.relationship("Jobs", back_populates='user')
     is_active = True
     is_authenticated = True
