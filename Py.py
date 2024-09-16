@@ -44,13 +44,13 @@ def check_flag(flag):
         con.close()
     else:
         for i in db_sess.query(Jobs).all():
-            if i.id not in current_user.jobs and flag == i.flag:
+            if i.id not in current_user.jobs[1:].split('#') and flag == i.flag:
                 con = sqlite3.connect("db/users.db")
 
                 cur = con.cursor()
 
                 cur.execute(
-                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id}" WHERE id = {current_user.id}""").fetchall()
+                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id +'#'}" WHERE id = {current_user.id}""").fetchall()
 
                 con.commit()
 
@@ -100,7 +100,7 @@ def add(command):
                               name,
                               jobs,
                               fine
-                          ) VALUES ({len(list(db_sess.query(User).all())) + 1}, "{command}", 0, 0)""").fetchall()
+                          ) VALUES ({int(db_sess.query(User).all()[-1].id) + 1}, "{command}", 0, 0)""").fetchall()
             except Exception as ex:
                 print(ex)
             con.commit()
@@ -145,7 +145,7 @@ for i in db_session.create_session().query(Jobs).all():
 @app.route('/', methods=['GET', 'POST'])
 def main_website():
     if request.method == 'POST':
-        chek_flag(request.form['input_flag'])
+        check_flag(request.form['input_flag'])
 
     return render_template('CTF.html', title='CTF')
 
@@ -155,7 +155,7 @@ def tasks():
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         if request.method == 'POST':
-            chek_flag(request.form['input_flag'])
+            check_flag(request.form['input_flag'])
 
         jobs = db_sess.query(Jobs).all()
 
@@ -167,7 +167,7 @@ def tasks():
 @app.route('/rating', methods=['GET', 'POST'])
 def rating():
     if request.method == 'POST':
-        chek_flag(request.form['input_flag'])
+        check_flag(request.form['input_flag'])
 
     db_sess = db_session.create_session()
 
@@ -175,8 +175,8 @@ def rating():
 
     for i in db_sess.query(User).all():
         balls = db_sess.query(User).filter(User.id == i.id)[0].fine
-        if int(i.jobs):
-            for a in i.jobs[1:]:
+        if i.jobs[1:]:
+            for a in i.jobs[1:].split('#')[:-1]:
                 job = db_sess.query(Jobs).filter(Jobs.id == a)[0]
                 balls += job.balls
         table.append([i.name, balls])
