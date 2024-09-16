@@ -33,7 +33,7 @@ blueprint = Blueprint(
 )
 
 
-def chek_flag(flag):
+def check_flag(flag):
     db_sess = db_session.create_session()
     if flag == 'null':
         con = sqlite3.connect("db/users.db")
