@@ -20,6 +20,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/users.db")
 
+admins = ['sad', 'Yazichniki']
 # отключаем логирование
 """ app.logger.disabled = True
 log = logging.getLogger('werkzeug')
@@ -86,26 +87,47 @@ def ball_changer(command, balls):
 
 @app.route("/add/<path:command>")
 def add(command):
-    try:
-        db_sess = db_session.create_session()
-        con = sqlite3.connect("db/users.db")
-        cur = con.cursor()
+    if current_user.name in admins:
         try:
-            if not list(db_sess.query(User).filter(User.name == command)):
-                cur.execute(
-                    f"""INSERT INTO users (
-                          id,
-                          name,
-                          jobs,
-                          fine
-                      ) VALUES ({len(list(db_sess.query(User).all())) + 1}, "{command}", 0, 0)""").fetchall()
-        except Exception as ex:
-            print(ex)
-        con.commit()
-        con.close()
-        return render_template('CTF.html', title='CTF')
-    except FileNotFoundError:
-        abort(404)
+            db_sess = db_session.create_session()
+            con = sqlite3.connect("db/users.db")
+            cur = con.cursor()
+            try:
+                if not list(db_sess.query(User).filter(User.name == command)):
+                    cur.execute(
+                        f"""INSERT INTO users (
+                              id,
+                              name,
+                              jobs,
+                              fine
+                          ) VALUES ({int(db_sess.query(User).all()[-1].id) + 1}, "{command}", 0, 0)""").fetchall()
+            except Exception as ex:
+                print(ex)
+            con.commit()
+            con.close()
+        except FileNotFoundError:
+            abort(404)
+
+    return render_template('CTF.html', title='CTF')
+
+
+@app.route("/delete/<path:command>")
+def delete(command):
+    if current_user.name in admins:
+        try:
+            db_sess = db_session.create_session()
+            con = sqlite3.connect("db/users.db")
+            cur = con.cursor()
+            try:
+                if list(db_sess.query(User).filter(User.name == command)):
+                    cur.execute(
+                        f"""DELETE FROM users WHERE name = '{command}'""").fetchall()
+            except Exception as ex:
+                print(ex)
+            con.commit()
+            con.close()
+        except FileNotFoundError:
+            abort(404)
 
     return render_template('CTF.html', title='CTF')
 
@@ -168,9 +190,11 @@ def web1():
 
 @app.route('/admin_panel')
 def admin_panel():
-    if request.method == 'POST':
-        check_flag(request.form['input_flag'])
-    return render_template('admin_panel.html', title='Admins')
+    if current_user.name in admins:
+        if request.method == 'POST':
+            check_flag(request.form['input_flag'])
+        return render_template('admin_panel.html', title='Admins')
+    return redirect("/")
 
 
 @login_manager.user_loader
