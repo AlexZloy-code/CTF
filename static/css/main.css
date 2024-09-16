@@ -1,0 +1,43 @@
+.main_web{
+    user-select: none;
+    width: 100%;
+    height: 600px;
+    margin: 2.5% 0px 0px 0px;
+    border: 1px solid #ffffff22;
+    background-color: #282c34;
+    background: linear-gradient(0deg, rgba(40,44,52,1) 0%, rgba(17,0,32,.5) 100%);
+    box-shadow: 0 7px 20px 5px #00000088;
+    border-radius: .7rem;
+    backdrop-filter: blur(7px);
+    overflow: hidden;
+    .info{
+      display: flex;
+      width: 100%;
+      padding: 1rem;
+      .taskImage{
+        border-radius: .5rem;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+      }
+      .taskname{
+        display: flex;
+        position: absolute;
+        left: 190px;
+        top: 10px;
+        color: gray;
+        font-size: 40px;
+        width: 1000px;
+      }
+      .taskInfo{
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .text{
+      p{
+        margin: 0px -5px 15px 10px;
+        max-width: 100%;
+      }
+    }
+  }

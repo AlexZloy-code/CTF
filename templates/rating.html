@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="bg">
+    <h1>Rating</h1>
+</div>
 <table>
     <tr><th>Имя</th><th>баллы</th></tr>
     {% for item in table%}
-    <div class="col-md6 border rounded">
-            <tr><td>{{item[0]}}</td><td>{{item[1]}}</td></tr>
-    </div>
+    {% if item[0] == current_user.name %}
+        <tr><td class="var">{{item[0]}}</td><td class="var">{{item[1]}}</td></tr>
+    {% else %}
+        <tr><td>{{item[0]}}</td><td>{{item[1]}}</td></tr>
+    {% endif %}
     {% endfor %}
 </table>
 {% endblock %}

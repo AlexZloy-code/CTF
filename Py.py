@@ -20,6 +20,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/users.db")
 
+admins = ['sad', 'Yazichniki']
 # отключаем логирование
 """ app.logger.disabled = True
 log = logging.getLogger('werkzeug')
@@ -32,7 +33,7 @@ blueprint = Blueprint(
 )
 
 
-def chek_flag(flag):
+def check_flag(flag):
     db_sess = db_session.create_session()
     if flag == 'null':
         con = sqlite3.connect("db/users.db")
@@ -43,13 +44,13 @@ def chek_flag(flag):
         con.close()
     else:
         for i in db_sess.query(Jobs).all():
-            if i.id not in current_user.jobs and flag == i.flag:
+            if i.id not in current_user.jobs[1:].split('#') and flag == i.flag:
                 con = sqlite3.connect("db/users.db")
 
                 cur = con.cursor()
 
                 cur.execute(
-                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id}" WHERE id = {current_user.id}""").fetchall()
+                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id +'#'}" WHERE id = {current_user.id}""").fetchall()
 
                 con.commit()
 
@@ -69,42 +70,67 @@ def get_csv(filename):
 
 @app.route("/ball_changer/<path:command>/<path:balls>")
 def ball_changer(command, balls):
-    try:
-        db_sess = db_session.create_session()
-        con = sqlite3.connect("db/users.db")
-        cur = con.cursor()
-        cur.execute(
-                f"""UPDATE users SET fine = {db_sess.query(User).filter(User.name == command)[0].fine - int(balls)} WHERE name = '{command}'""").fetchall()
-        con.commit()
-        con.close()
-    except FileNotFoundError:
-        abort(404)
+    if current_user.name in admins:
+        try:
+            db_sess = db_session.create_session()
+            con = sqlite3.connect("db/users.db")
+            cur = con.cursor()
+            cur.execute(
+                    f"""UPDATE users SET fine = {db_sess.query(User).filter(User.name == command)[0].fine - int(balls)} WHERE name = '{command}'""").fetchall()
+            con.commit()
+            con.close()
+        except FileNotFoundError:
+            abort(404)
 
     return render_template('CTF.html', title='CTF')
 
 
 @app.route("/add/<path:command>")
 def add(command):
-    try:
-        db_sess = db_session.create_session()
-        con = sqlite3.connect("db/users.db")
-        cur = con.cursor()
+    if current_user.name in admins:
         try:
-            if not list(db_sess.query(User).filter(User.name == command)):
-                cur.execute(
-                    f"""INSERT INTO users (
-                          id,
-                          name,
-                          jobs,
-                          fine
-                      ) VALUES ({len(list(db_sess.query(User).all())) + 1}, "{command}", 0, 0)""").fetchall()
-        except Exception as ex:
-            print(ex)
-        con.commit()
-        con.close()
-        return render_template('CTF.html', title='CTF')
-    except FileNotFoundError:
-        abort(404)
+            db_sess = db_session.create_session()
+            con = sqlite3.connect("db/users.db")
+            cur = con.cursor()
+            try:
+                if not list(db_sess.query(User).filter(User.name == command)):
+                    cur.execute(
+                        f"""INSERT INTO users (
+                              id,
+                              name,
+                              jobs,
+                              fine
+                          ) VALUES ({int(db_sess.query(User).all()[-1].id) + 1}, "{command}", 0, 0)""").fetchall()
+            except Exception as ex:
+                print(ex)
+            con.commit()
+            con.close()
+        except FileNotFoundError:
+            abort(404)
+
+    return render_template('CTF.html', title='CTF')
+
+
+@app.route("/delete/<path:command>")
+def delete(command):
+    if current_user.name in admins:
+        if command not in admins:
+            try:
+                db_sess = db_session.create_session()
+                con = sqlite3.connect("db/users.db")
+                cur = con.cursor()
+                try:
+                    if list(db_sess.query(User).filter(User.name == command)):
+                        cur.execute(
+                            f"""DELETE FROM users WHERE name = '{command}'""").fetchall()
+                except Exception as ex:
+                    print(ex)
+                con.commit()
+                con.close()
+            except FileNotFoundError:
+                abort(404)
+
+    return render_template('CTF.html', title='CTF')
 
 
 def create_route(i):
@@ -120,7 +146,7 @@ for i in db_session.create_session().query(Jobs).all():
 @app.route('/', methods=['GET', 'POST'])
 def main_website():
     if request.method == 'POST':
-        chek_flag(request.form['input_flag'])
+        check_flag(request.form['input_flag'])
 
     return render_template('CTF.html', title='CTF')
 
@@ -130,7 +156,7 @@ def tasks():
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         if request.method == 'POST':
-            chek_flag(request.form['input_flag'])
+            check_flag(request.form['input_flag'])
 
         jobs = db_sess.query(Jobs).all()
 
@@ -142,7 +168,7 @@ def tasks():
 @app.route('/rating', methods=['GET', 'POST'])
 def rating():
     if request.method == 'POST':
-        chek_flag(request.form['input_flag'])
+        check_flag(request.form['input_flag'])
 
     db_sess = db_session.create_session()
 
@@ -150,8 +176,8 @@ def rating():
 
     for i in db_sess.query(User).all():
         balls = db_sess.query(User).filter(User.id == i.id)[0].fine
-        if int(i.jobs):
-            for a in i.jobs[1:]:
+        if i.jobs[1:]:
+            for a in i.jobs[1:].split('#')[:-1]:
                 job = db_sess.query(Jobs).filter(Jobs.id == a)[0]
                 balls += job.balls
         table.append([i.name, balls])
@@ -162,6 +188,12 @@ def rating():
 @app.route('/web/web1')
 def web1():
     return render_template('web1.html', title='web1')
+
+@app.route('/admin_panel')
+def admin_panel():
+    if request.method == 'POST':
+        check_flag(request.form['input_flag'])
+    return render_template('admin_panel.html', title='Admins')
 
 
 @login_manager.user_loader
