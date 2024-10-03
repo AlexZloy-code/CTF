@@ -1,0 +1,17 @@
+h2{
+    margin: 1% 0% 5% 17%;
+    font-size: 160px;
+}
+label{
+    margin: 10% 0 18% 32%;
+    font-size: 60px; 
+}
+input{
+    margin: 2% 0 5% 26%;
+    height: 30px;
+    width: 700px
+}
+.btn{
+    margin: 0 0 5% 44%;
+    width: 140px;
+}

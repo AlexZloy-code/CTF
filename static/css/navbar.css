@@ -7,51 +7,51 @@
   display:flex;
   align-items:center;
   font-size:1.25rem;
-  
-  .invite{
-    position: flex;
-    margin: 0 88% 0 1%;
-  }
+} 
+.invite{
+  position: flex;
+  margin: 0 52% 0 1%;
+  color: black;
+}
 
-  .name_of_command{
-    position: flex;
-    font-size: 25px;
-    margin: 0 0.5%;
-    margin-left: 10px;
-    height: 10%;
-    color: #ffffff;
-    background-color: #00000020;
-    padding: 0.5%;
-    cursor: pointer;
-    border: 0;
-  }
+.name_of_command{
+  position: flex;
+  font-size: 25px;
+  margin: 0 0.5%;
+  margin-left: 10px;
+  height: 10%;
+  color: #ffffff;
+  background-color: #00000020;
+  padding: 0.5%;
+  cursor: pointer;
+  border: 0;
+}
 
-  .rating{
-    position: flex;
-    margin: 0 2%;
-    color:rgba(0,0,0,.9);
-  }
+.rating{
+  position: flex;
+  margin: 0 2%;
+  color:rgba(0,0,0,.9);
+}
 
-  .tasks{
-    position: flex;
-    margin: 0 0.5%;
-    color:rgba(0,0,0,.9);
-  }
+.tasks{
+  position: flex;
+  margin: 0 0.5%;
+  color:rgba(0,0,0,.9);
+}
 
-  .input_flag{
-    position: flex;
-    margin: 0 0 0 42.5%;
-    width: 22.5%;
-    height: 5%;
-    border: 1px solid #ffffff22;
-    background-color: #282c34;
-    background: #858a93;
-    box-shadow: 0 7px 20px 5px #00000088;
-    border-radius: .7rem;
-    backdrop-filter: blur(7px);
-  }
-
-  .button_try{
+.input_flag{
+  position: flex;
+  margin: 0 0 0 42.5%;
+  width: 22.5%;
+  height: 5%;
+  border: 1px solid #ffffff22;
+  background-color: #282c34;
+  background: #858a93;
+  box-shadow: 0 7px 20px 5px #00000088;
+  border-radius: .7rem;
+  backdrop-filter: blur(7px);
+}
+.button_try{
     line-height: 20px;
     vertical-align: text-top;
     height: 3.25%;
@@ -63,12 +63,10 @@
     box-shadow: 0 7px 20px 5px #00000088;
     border-radius: .8rem;
     font-size: 17px;
-  }
-
-  .CTF{
-    position: flex;
-    margin: 0 0 0 4%;
-    height: 5%;
-    color:rgba(0,0,0,.9);
-  }
+ }
+.CTF{
+  position: flex;
+  margin: 0 0 0 40%;
+  height: 5%;
+  color:rgba(0,0,0,.9);
 }

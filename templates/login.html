@@ -1,27 +1,12 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
+
+{% block content %}
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    <link rel="stylesheet"
-          href="/static/css/style.css">
-    <link rel="stylesheet"
-          href="/static/css/style1.css">
-    <title>{{title}}</title>
+        href="/static/css/login.css">
 </head>
-<body>
-<header>
-    <nav class="navbar navbar-light bg-dark menu">
-        <a class="navbar-brand" href="/">CTF</a>
-    </nav>
-</header>
-<!-- Begin page content -->
 <main role="main" class="container">
-    <h1>Авторизация</h1>
+    <h2>Авторизация</h2>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -37,6 +22,4 @@
         <div>{{ message }}</div>
     </form>
 </main>
-</body>
-</html>
-    
+{% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet"
+        href="/static/css/task_open.css">
+</head>
 <div class="bg">
     <h1>{{current_user.name}}</h1>
 </div>
@@ -17,7 +21,9 @@
     <div class="text">
         <p>{{job.job}}</p>
     </div>
-    <button class="button_download" onclick="window.location.href = 'http://127.0.0.1:8000/{{job.link}}'"><a>Скачать файл задания</a></button>
+    {% if job.link %}
+        <button class="button_download" onclick="window.location.href = '/{{job.link}}'"><a>{{'Скачать файл задания' if '.' in job.link else 'Перейти по ссылке'}}</a></button>
+    {% endif %}
 </div>
 {% endblock %}
 https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80

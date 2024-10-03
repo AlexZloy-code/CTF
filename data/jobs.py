@@ -1,4 +1,3 @@
-import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
@@ -9,7 +8,8 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    type = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     full_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     balls = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)

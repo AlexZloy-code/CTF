@@ -133,7 +133,7 @@ def delete(command):
 
 
 def create_route(i):
-    @app.route(f'/{i.type.lower()}', endpoint=i.type)
+    @app.route(f'/{i.full_name.lower()}', endpoint=i.full_name)
     def index():
         return render_template('index1.html', job=i, current_user=current_user)
 
@@ -184,10 +184,6 @@ def rating():
     return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]))
 
 
-@app.route('/web/web1')
-def web1():
-    return render_template('web1.html', title='web1')
-
 @app.route('/admin_panel')
 def admin_panel():
     if current_user.name in admins:
@@ -232,6 +228,51 @@ def not_found(error):
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
+
+
+@app.route('/web/web1')
+def web1():
+    return render_template('web/web1.html', title='web1')
+
+
+@app.route('/web/web2', methods=['GET', 'POST'])
+def web2():
+    if request.method == 'POST':
+        if (request.form['username']) == 'admin' and (request.form['password']) == '':
+            return render_template('web/index.html',
+                                    message="Q1RGe0YxYWdfaTVfZmw0Z30========",
+                                    title='Авторизация')
+        return render_template('web/index.html',
+                               message="Некорректный ник или пароль",
+                               title='Авторизация')
+    
+    return render_template('web/index.html', message="", title='Авторизация')
+
+
+@app.route('/web/web3', methods=['GET', 'POST'])
+def web3():
+    if request.method == 'POST':
+        if (request.form['username']) == current_user.name:
+            return render_template('web/index1.html',
+                               message="Robots are anithing around us",
+                               title='Авторизация')
+        else:
+            return render_template('web/index1.html',
+                               message="Некорректный ник",
+                               title='Авторизация')
+    
+    return render_template('web/index1.html', message="", title='Авторизация')
+
+
+@app.route('/web/web3/robots.txt')
+def web3_1():
+    return render_template('web/robots.html', message="", title='Авторизация')
+
+
+
+
+
 
 
 def main():

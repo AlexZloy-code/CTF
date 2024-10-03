@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet"
+        href="/static/css/tasks.css">
+</head>
 {% if not current_user.is_authenticated %}
-    <h1 class="un_authenticated"> Вы не вошли в систему</h1>
+    <a class="un_authenticated"> Вы не вошли в систему</a>
 {% else %}
-    <h1 class="tasks_text">Tasks</h1>
+    <a class="tasks_text">Tasks</a>
 {% endif %}
 
 <div class="bg">
@@ -12,14 +16,14 @@
 </div>
 <div>
     {% for item in jobs%}
-    <div class="Task" onclick="window.location.href = '{{item.type.lower()}}'">
+    <div class="Task" onclick="window.location.href = '{{item.full_name.lower()}}'">
         <div class='main'>
             {% if item.img %}
                 <img class='taskImage' src="static/img/{{item.img}}" alt="LOGO">
             {% else %}
                 <img class='taskImage' src="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="LOGO">
                 {% endif %}
-            <h2>{{item.type}}</h2>
+            <h2>{{item.full_name}}</h2>
             <div class="taskInfo">
                 <div class="balls">{{item.balls}} очков</div>
                 <div class="is_finish">{{'Сделано' if item.id in current_user.jobs else 'Не сделано'}}</div>
