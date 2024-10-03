@@ -216,7 +216,7 @@ def login():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.name == form.name.data).first()
         if user:
-            login_user(user, remember=form.remember_me.data)
+            login_user(user, remember=True)
             return redirect("/tasks")
         return render_template('login.html',
                                message="Нет такой команды",

@@ -24,7 +24,7 @@
       padding: 1rem;
       .taskImage{
         border-radius: .5rem;
-        max-width: 90%;
+        width: 248px;
         height: 250px;
         object-fit: cover;
       }
