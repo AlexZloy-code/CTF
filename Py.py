@@ -35,9 +35,10 @@ blueprint = Blueprint(
 
 def check_flag(flag):
     db_sess = db_session.create_session()
+
+    con = sqlite3.connect("db/users.db")
+    cur = con.cursor()
     if flag == 'null':
-        con = sqlite3.connect("db/users.db")
-        cur = con.cursor()
         cur.execute(
             f"""UPDATE users SET jobs = "{0}" WHERE id = {current_user.id}""").fetchall()
         con.commit()
@@ -45,19 +46,28 @@ def check_flag(flag):
     else:
         for i in db_sess.query(Jobs).all():
             if i.id not in current_user.jobs[1:].split('#') and flag == i.flag:
-                con = sqlite3.connect("db/users.db")
-
-                cur = con.cursor()
 
                 cur.execute(
-                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id +'#'}" WHERE id = {current_user.id}""").fetchall()
+                    f"""UPDATE users SET jobs = "{current_user.jobs + i.id + '#'}" WHERE id = {current_user.id}""").fetchall()
 
                 con.commit()
 
                 con.close()
 
                 current_user.jobs += i.id
-                break
+                return True
+        if '##' not in current_user.jobs and flag == 'CTF{we_wish_you_good_luck':
+            redirect(f'/ball_changer/{current_user.name}/-50')
+
+            cur.execute(
+                f"""UPDATE users SET jobs = "{current_user.jobs + '##'}" WHERE id = {current_user.id}""").fetchall()
+
+            con.commit()
+
+            con.close()
+
+            current_user.jobs += i.id
+            return True
 
 
 @app.route("/download/<path:filename>")
@@ -76,7 +86,7 @@ def ball_changer(command, balls):
             con = sqlite3.connect("db/users.db")
             cur = con.cursor()
             cur.execute(
-                    f"""UPDATE users SET fine = {db_sess.query(User).filter(User.name == command)[0].fine - int(balls)} WHERE name = '{command}'""").fetchall()
+                f"""UPDATE users SET fine = {db_sess.query(User).filter(User.name == command)[0].fine - int(balls)} WHERE name = '{command}'""").fetchall()
             con.commit()
             con.close()
         except FileNotFoundError:
@@ -144,30 +154,33 @@ for i in db_session.create_session().query(Jobs).all():
 
 @app.route('/', methods=['GET', 'POST'])
 def main_website():
+    cor = ''
     if request.method == 'POST':
-        check_flag(request.form['input_flag'])
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
 
-    return render_template('CTF.html', title='CTF')
+    return render_template('CTF.html', title='CTF', cor=cor)
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
 def tasks():
+    cor = ''
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         if request.method == 'POST':
-            check_flag(request.form['input_flag'])
+            cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
 
         jobs = db_sess.query(Jobs).all()
 
     else:
         jobs = []
-    return render_template('index.html', title='Журнал работ', jobs=jobs, current_user=current_user)
+    return render_template('index.html', title='Журнал работ', jobs=jobs, current_user=current_user, cor=cor)
 
 
 @app.route('/rating', methods=['GET', 'POST'])
 def rating():
+    cor = ''
     if request.method == 'POST':
-        check_flag(request.form['input_flag'])
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
 
     db_sess = db_session.create_session()
 
@@ -177,19 +190,21 @@ def rating():
         balls = db_sess.query(User).filter(User.id == i.id)[0].fine
         if i.jobs[1:]:
             for a in i.jobs[1:].split('#')[:-1]:
-                job = db_sess.query(Jobs).filter(Jobs.id == a)[0]
-                balls += job.balls
+                if a:
+                    job = db_sess.query(Jobs).filter(Jobs.id == a)[0]
+                    balls += job.balls
         table.append([i.name, balls])
 
-    return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]))
+    return render_template('rating.html', table=sorted(table, key=lambda x: [-x[1], x[0]]), cor=cor)
 
 
 @app.route('/admin_panel')
 def admin_panel():
+    cor = ''
     if current_user.name in admins:
         if request.method == 'POST':
-            check_flag(request.form['input_flag'])
-        return render_template('admin_panel.html', title='Admins')
+            cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
+        return render_template('admin_panel.html', title='Admins', cor=cor)
     return redirect("/")
 
 
@@ -230,7 +245,6 @@ def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
-
 @app.route('/web/web1')
 def web1():
     return render_template('web/web1.html', title='web1')
@@ -241,12 +255,12 @@ def web2():
     if request.method == 'POST':
         if (request.form['username']) == 'admin' and (request.form['password']) == '':
             return render_template('web/index.html',
-                                    message="Q1RGe0YxYWdfaTVfZmw0Z30========",
-                                    title='Авторизация')
+                                   message="Q1RGe0YxYWdfaTVfZmw0Z30========",
+                                   title='Авторизация')
         return render_template('web/index.html',
                                message="Некорректный ник или пароль",
                                title='Авторизация')
-    
+
     return render_template('web/index.html', message="", title='Авторизация')
 
 
@@ -255,24 +269,19 @@ def web3():
     if request.method == 'POST':
         if (request.form['username']) == current_user.name:
             return render_template('web/index1.html',
-                               message="Robots are anithing around us",
-                               title='Авторизация')
+                                   message="Robots are anithing around us",
+                                   title='Авторизация')
         else:
             return render_template('web/index1.html',
-                               message="Некорректный ник",
-                               title='Авторизация')
-    
+                                   message="Некорректный ник",
+                                   title='Авторизация')
+
     return render_template('web/index1.html', message="", title='Авторизация')
 
 
 @app.route('/web/web3/robots.txt')
 def web3_1():
     return render_template('web/robots.html', message="", title='Авторизация')
-
-
-
-
-
 
 
 def main():
