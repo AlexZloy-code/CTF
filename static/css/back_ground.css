@@ -63,5 +63,7 @@ hr {
 }
 
 .tasks_text{
-  margin: 0 0 0 44%;
+  color: white;
+  font-size: 100px;
+  margin: 0 0 0 40%;
 }

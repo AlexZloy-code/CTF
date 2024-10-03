@@ -1,8 +1,8 @@
 .Task_open{
   user-select: none;
-  width: 50%;
-  height: 500px;
-  margin: 5% 0px 0px 22.5%;
+  width: 70%;
+  height: 600px;
+  margin: 5% 0px 0px 15%;
   border: 1px solid #ffffff22;
   background-color: #282c34;
   background: linear-gradient(0deg, rgba(40,44,52,1) 0%, rgba(17,0,32,.5) 100%);
@@ -10,73 +10,72 @@
   border-radius: .7rem;
   backdrop-filter: blur(7px);
   overflow: hidden;
-  .info{
-    display: flex;
-    width: 100%;
-    padding: 1rem;
-    .taskImage{
-      border-radius: .5rem;
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-    }
-    .taskname{
-      display: flex;
-      position: absolute;
-      left: 190px;
-      top: 10px;
-      color: gray;
-      font-size: 40px;
-      width: 1000px;
-    }
-    .creator{
-      position: absolute;
-      left: 190px;
-      top: 70px;
-      display: flex;
-      align-items: center;
-      color: cyan;
-      font-size: 25px;
-      width: 500px;
-      }
-    .taskInfo{
-      justify-content: space-between;
-      align-items: center;
-      .balls{
-        position: absolute;
-        left: 190px;
-        top: 140px;
-        align-items: center;
-        color: #ee83e5;
-        font-weight: 700;
-      }
-      .is_finish{
-        position: absolute;
-        left: 300px;
-        top: 140px;
-        align-items: center;
-        color: #a89ec9;
-        margin-right: .2rem;
-      }
-    }
-  }
-  .button_download{
-    width: 200px;
-    margin: 20% 0px 0px 70%;
-    border: 1px solid #ffffff22;
-    background-color: #282c34;
-    background: #858a93;
-    box-shadow: 0 7px 20px 5px #00000088;
-    border-radius: .7rem;
-    backdrop-filter: blur(7px);
-  }
-  .text{
-    p{
-      margin: 0px -5px 15px 10px;
-      max-width: 100%;
-    }
-  }
 }
+.info{
+  display: flex;
+  width: 100%;
+  padding: 1rem;
+}
+.taskImage{
+  border-radius: .5rem;
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+}
+.taskname{
+display: flex;
+position: absolute;
+left: 350px;
+top: 10px;
+color: gray;
+font-size: 40px;
+width: 1000px;
+}
+.creator{
+  position: absolute;
+  left: 350px;
+  top: 70px;
+  display: flex;
+  align-items: center;
+  color: cyan;
+  font-size: 25px;
+  width: 500px;
+}
+.taskInfo{
+  justify-content: space-between;
+  align-items: center;
+}
+.balls{
+    position: absolute;
+    left: 350px;
+    top: 300px;
+    align-items: center;
+    color: #ee83e5;
+    font-weight: 700;
+}
+.is_finish{
+    position: absolute;
+    left: 460px;
+    top: 300px;
+    align-items: center;
+    color: #a89ec9;
+    margin-right: .2rem;
+}
+.button_download{
+  width: 200px;
+  margin:13% 0px 0px 80%;
+  border: 1px solid #ffffff22;
+  background-color: #282c34;
+  background: #858a93;
+  box-shadow: 0 7px 20px 5px #00000088;
+  border-radius: .7rem;
+  backdrop-filter: blur(7px);
+}
+p{
+    margin: 0px -5px 15px 10px;
+    max-width: 100%;
+}
+
 img{
   width: 320px;
   height: 320px;

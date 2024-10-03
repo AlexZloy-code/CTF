@@ -9,7 +9,6 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     full_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     balls = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     creator = sqlalchemy.Column(sqlalchemy.String, nullable=True)
