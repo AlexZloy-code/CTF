@@ -12,6 +12,7 @@ from data.jobs import Jobs
 
 from forms.login_form import LoginForm
 from flask_restful import reqparse, abort, Api, Resource
+from waitress import serve
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -285,8 +286,9 @@ def web3_1():
 
 
 def main():
+    
     app.register_blueprint(blueprint)
-    app.run(port=8000, host='127.0.0.1')
+    serve(app=app, port=8000, host='0.0.0.0', threads=1)
 
 
 if __name__ == '__main__':
