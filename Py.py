@@ -12,7 +12,7 @@ from data.jobs import Jobs
 
 from forms.login_form import LoginForm
 from flask_restful import reqparse, abort, Api, Resource
-from waitress import serve
+# from waitress import serve
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -47,7 +47,6 @@ def check_flag(flag):
     else:
         for i in db_sess.query(Jobs).all():
             if i.id not in current_user.jobs[1:].split('#') and flag == i.flag:
-
                 cur.execute(
                     f"""UPDATE users SET jobs = "{current_user.jobs + i.id + '#'}" WHERE id = {current_user.id}""").fetchall()
 
@@ -57,7 +56,7 @@ def check_flag(flag):
 
                 current_user.jobs += i.id
                 return True
-        if '##' not in current_user.jobs and flag == 'CTF{we_wish_you_good_luck':
+        if '##' not in current_user.jobs and flag == 'CTF{we_wish_you_good_luck}':
             redirect(f'/ball_changer/{current_user.name}/-50')
 
             cur.execute(
@@ -144,9 +143,12 @@ def delete(command):
 
 
 def create_route(i):
-    @app.route(f'/{i.full_name.lower()}', endpoint=i.full_name)
+    @app.route(f'/{i.full_name.lower()}', methods=['GET', 'POST'], endpoint=i.full_name)
     def index():
-        return render_template('index1.html', job=i, current_user=current_user)
+        cor = ''
+        if request.method == 'POST':
+            cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
+        return render_template('index1.html', job=i, current_user=current_user, cor=cor)
 
 
 for i in db_session.create_session().query(Jobs).all():
@@ -285,10 +287,14 @@ def web3_1():
     return render_template('web/robots.html', message="", title='Авторизация')
 
 
-def main():
-    
+'''def main():
     app.register_blueprint(blueprint)
-    serve(app=app, port=8000, host='0.0.0.0', threads=1)
+    serve(app=app, port=8000, host='0.0.0.0', threads=1)'''
+
+
+def main():
+    app.register_blueprint(blueprint)
+    app.run(port=8000, host='127.0.0.1')
 
 
 if __name__ == '__main__':
