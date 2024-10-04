@@ -5,3 +5,4 @@ flask_login
 flask_restful
 sqlalchemy_serializer
 flask_wtf
+waitress
