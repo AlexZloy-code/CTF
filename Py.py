@@ -247,15 +247,23 @@ def not_found(error):
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
+@app.route('/anonymous_flag_ztyee', methods=['GET', 'POST'])
+def web_crypto():
+    if request.method == 'POST':
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
+    return render_template('web/crypto.html', title='Crypto_helper')
 
-@app.route('/web/web1')
+@app.route('/web/web1', methods=['GET', 'POST'])
 def web1():
+    if request.method == 'POST':
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
     return render_template('web/web1.html', title='web1')
 
 
 @app.route('/web/web2', methods=['GET', 'POST'])
 def web2():
     if request.method == 'POST':
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
         if (request.form['username']) == 'admin' and (request.form['password']) == '':
             return render_template('web/index.html',
                                    message="Q1RGe0YxYWdfaTVfZmw0Z30========",
@@ -270,6 +278,7 @@ def web2():
 @app.route('/web/web3', methods=['GET', 'POST'])
 def web3():
     if request.method == 'POST':
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
         if (request.form['username']) == current_user.name:
             return render_template('web/index1.html',
                                    message="Robots are anithing around us",
@@ -285,6 +294,12 @@ def web3():
 @app.route('/web/web3/robots.txt')
 def web3_1():
     return render_template('web/robots.html', message="", title='Авторизация')
+
+@app.route('/web/web4', methods=['GET', 'POST'])
+def web4():
+    if request.method == 'POST':
+        cor = 'Correct' if check_flag(request.form['input_flag']) else 'Incorrect'
+    return render_template('web/web4.html', title='web4')
 
 
 '''def main():

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg">
+    <h1>CTF</h1>
+</div>
+<h2 id="text_of_task">Счётчик должен быть равен 20000</h2>
+<h4>Набрано <span id="count">0</span></h4>
+<button id="btn">Ckick Here!</button>
+
+<script>let Barny = 0;
+let btn = document.getElementById("btn");
+let count = document.getElementById("count");
+let text = document.getElementById("text_of_task");
+btn.onclick = popka;
+function popka() {
+    Barny ++;
+    if (Barny === 20000) {
+        text.innerHTML = 'OFR{Iqn_U5_Qm5k_:)}'
+    }
+    count.innerHTML = Barny;
+};</script>
+{% endblock %}

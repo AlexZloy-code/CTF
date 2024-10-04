@@ -33,20 +33,21 @@
   }
  
 */
- table {
-   border: 1px solid #69c;
- }
- th {
-   font-weight: normal;
-   color: #039;
-   padding: 10px;
- }
- td {
-   color: #669;
-   border-top: 1px dashed white;
-   padding: 10px;
-   background:#ccddff;
- }
- .var{
-	background: #3374ed;
-   }
+table {
+  border: 1px solid #69c;
+}
+th {
+  font-weight: normal;
+  color: #039;
+  padding: 10px;
+}
+td {
+  color: #669;
+  border-top: 1px dashed white;
+  padding: 10px;
+  background:#ccddff;
+}
+.var{
+  background: #3374ed;
+  color: white;
+}
